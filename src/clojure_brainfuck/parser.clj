@@ -29,3 +29,15 @@
               \[ (inc matching-bracket-count)
               \] (dec matching-bracket-count)
               matching-bracket-count))))))
+
+(defn update-first-map-entry [map x]
+  (update map (key (first map)) x))
+
+(defn generate-ast [string]
+  (loop [ast () current-label {:main ""} stack () i 0 loop-count 0]
+    (if (= (count string) i)
+      (reduce conj(apply conj ast current-label stack))
+      (case (.charAt string i)
+        \[ (recur ast {loop-count ""} (conj stack (update-first-map-entry current-label #(str % loop-count))) (inc i) (inc loop-count))
+        \] (recur (conj ast (update-first-map-entry current-label #(str % \R))) (first stack) (pop stack) (inc i) loop-count)
+        (recur ast (update-first-map-entry current-label #(str % (nth string i))) stack (inc i) loop-count)))))
