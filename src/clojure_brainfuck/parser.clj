@@ -54,10 +54,10 @@
     ;;assume it's a loop
     (str "call loop" character)))
 
-(defn generate-segment [name statements]
+(defn generate-segment [name & statements]
   (str "segment ." name \newline (str/join \newline statements) \newline))
 
-(defn generate-label [name statements]
+(defn generate-label [name & statements]
   (str name \: \newline (str/join \newline statements) \newline))
 
 
