@@ -41,3 +41,31 @@
         \[ (recur ast {loop-count ""} (conj stack (update-first-map-entry current-label #(str % loop-count))) (inc i) (inc loop-count))
         \] (recur (conj ast (update-first-map-entry current-label #(str % \R))) (first stack) (pop stack) (inc i) loop-count)
         (recur ast (update-first-map-entry current-label #(str % (nth string i))) stack (inc i) loop-count)))))
+
+(defn brainfuck-to-assembly [character]
+  (case character
+    \+ "inc byte [array]"
+    \- "dec byte [array]"
+    \< "dec eax"
+    \> "inc eax"
+    \. "call print_character"
+    \, "call read_character"
+    \R "ret"
+    ;;assume it's a loop
+    (str "call loop" character)))
+
+(defn generate-segment [name statements]
+  (str "segment ." name \newline (str/join \newline statements) \newline))
+
+(defn generate-label [name statements]
+  (str name \: \newline (str/join \newline statements) \newline))
+
+(def print-character 
+  (generate-label "print_character" ["push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax" 
+    "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"]))
+
+(defn generate-assembly []
+  (str (generate-segment "bss" ["array: resb 30000"]) 
+       (generate-segment "text" ["global _start"])
+       (generate-label "_start" (cons "mov eax, array" (map brainfuck-to-assembly "+++++++++++++++++++++++++++++++++.")))
+       print-character))
