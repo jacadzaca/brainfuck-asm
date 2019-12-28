@@ -60,12 +60,14 @@
 (defn generate-label [name statements]
   (str name \: \newline (str/join \newline statements) \newline))
 
+
 (def print-character 
   (generate-label "print_character" ["push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax" 
     "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"]))
 
-(defn generate-assembly []
-  (str (generate-segment "bss" ["array: resb 30000"]) 
-       (generate-segment "text" ["global _start"])
-       (generate-label "_start" (cons "mov eax, array" (map brainfuck-to-assembly "+++++++++++++++++++++++++++++++++.")))
-       print-character))
+(defn generate-assembly [ast]
+  (dotimes [i (count ast)]
+    (cond 
+      (str/includes (nth (keys ast) i) "loop") (println (generate-loop (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i))) 
+      :else (println (generate-label (nth (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i)))))))
+
