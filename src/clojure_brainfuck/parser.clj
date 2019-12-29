@@ -26,7 +26,7 @@
    :type :loop
    :statements []})
 
-(defn brainfuck-to-ast-node [character]
+(defn brainfuck->ast-node [character]
   (case character
     \+ (create-statement :inc)
     \- (create-statement :dec)
@@ -51,7 +51,7 @@
                   (inc i)
                   loop-count)
            (recur ast
-                  (update current-label :statements conj (brainfuck-to-ast-node (.charAt string i)))
+                  (update current-label :statements conj (brainfuck->ast-node (.charAt string i)))
                   stack
                   (inc i)
                   loop-count)))))
