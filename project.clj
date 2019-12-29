@@ -6,4 +6,6 @@
   :main ^:skip-aot clojure-brainfuck.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
-  :plugins [[jonase/eastwood "0.3.5"] [lein-kibit "0.1.8"]])
+  :plugins [[jonase/eastwood "0.3.5"]
+            [lein-kibit "0.1.8"]
+            [lein-cljfmt "0.6.6"]])
