@@ -14,22 +14,6 @@
               matching-bracket-count)))))
     string))
 
-(defn find-coresponding-bracket
-  "Returns index of the corespoding closing bracket or nil if no bracket can be found.
-  Function expects the passed string to have an opening bracket on index n"
-  [string n]
-  (cond 
-    (or (empty? string) (not= (nth string n) \[)) nil
-    :else (loop [i (+ 1 n) matching-bracket-count 1] 
-        (cond 
-          (zero? matching-bracket-count) (- i 1)
-          (= (.length string) i) nil
-          :else (recur (inc i)
-            (case (.charAt string i)
-              \[ (inc matching-bracket-count)
-              \] (dec matching-bracket-count)
-              matching-bracket-count))))))
-
 (defn create-statement 
   ([type]
     {:type type})
@@ -71,34 +55,3 @@
                   stack
                   (inc i)
                   loop-count)))))
-
-(defn brainfuck-to-assembly [character]
-  (case character
-    \+ "inc byte [eax]"
-    \- "dec byte [eax]"
-    \< "dec eax"
-    \> "inc eax"
-    \. "call print_character"
-    \, "call read_character"
-    ;;assume it's a loop
-    (str "call loop" character)))
-
-(defn generate-segment [name & statements]
-  (str "segment ." name \newline (str/join \newline statements) \newline))
-
-(defn generate-label [name & statements]
-  (str name \: \newline (str/join \newline (flatten statements)) \newline))
-
-(defn generate-loop [name statements]
-  (generate-label name statements "cmp byte [eax], 0" (str "jne " name) "ret"))
-
-(def print-character 
-  (generate-label "print_character" ["push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax" 
-    "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"]))
-
-(defn generate-assembly [ast]
-  (dotimes [i (count ast)]
-    (cond 
-      (str/includes? (nth (keys ast) i) "loop") (println (generate-loop (nth (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i)))) 
-      :else (println (generate-label (nth (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i)))))))
-
