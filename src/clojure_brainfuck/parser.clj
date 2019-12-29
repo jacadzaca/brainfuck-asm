@@ -7,9 +7,9 @@
       (if (= matching-bracket-count 0)
         (subs string i)
         (recur (inc i) 
-          (if (= (.charAt string i) \[)
+          (if (= (nth string i) \[)
             (inc matching-bracket-count) 
-            (if (= (.charAt string i) \])
+            (if (= (nth string i) \])
               (dec matching-bracket-count)
               matching-bracket-count)))))
     string))
@@ -39,7 +39,7 @@
   (loop [ast () current-label {:type :entrypoint :statements []} stack () i 0 loop-count 0]
     (if (= (count string) i)
       (apply conj ast current-label stack)
-      (case (.charAt string i)
+      (case (nth string i)
         \[ (recur ast
                   (craete-loop (str "loop" loop-count))
                   (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
@@ -51,7 +51,7 @@
                   (inc i)
                   loop-count)
            (recur ast
-                  (update current-label :statements conj (brainfuck->ast-node (.charAt string i)))
+                  (update current-label :statements conj (brainfuck->ast-node (nth string i)))
                   stack
                   (inc i)
                   loop-count)))))
