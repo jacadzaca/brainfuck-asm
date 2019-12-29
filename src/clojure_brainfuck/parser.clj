@@ -38,19 +38,18 @@
     (if (= (count string) i)
       (reduce conj(apply conj ast current-label stack))
       (case (.charAt string i)
-        \[ (recur ast {loop-count ""} (conj stack (update-first-map-entry current-label #(str % loop-count))) (inc i) (inc loop-count))
-        \] (recur (conj ast (update-first-map-entry current-label #(str % \R))) (first stack) (pop stack) (inc i) loop-count)
+        \[ (recur ast {(str "loop" loop-count) ""} (conj stack (update-first-map-entry current-label #(str % loop-count))) (inc i) (inc loop-count))
+        \] (recur (conj ast current-label) (first stack) (pop stack) (inc i) loop-count)
         (recur ast (update-first-map-entry current-label #(str % (nth string i))) stack (inc i) loop-count)))))
 
 (defn brainfuck-to-assembly [character]
   (case character
-    \+ "inc byte [array]"
-    \- "dec byte [array]"
+    \+ "inc byte [eax]"
+    \- "dec byte [eax]"
     \< "dec eax"
     \> "inc eax"
     \. "call print_character"
     \, "call read_character"
-    \R "ret"
     ;;assume it's a loop
     (str "call loop" character)))
 
@@ -58,8 +57,10 @@
   (str "segment ." name \newline (str/join \newline statements) \newline))
 
 (defn generate-label [name & statements]
-  (str name \: \newline (str/join \newline statements) \newline))
+  (str name \: \newline (str/join \newline (flatten statements)) \newline))
 
+(defn generate-loop [name statements]
+  (generate-label name statements "cmp byte [eax], 0" (str "jne " name) "ret"))
 
 (def print-character 
   (generate-label "print_character" ["push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax" 
@@ -68,6 +69,6 @@
 (defn generate-assembly [ast]
   (dotimes [i (count ast)]
     (cond 
-      (str/includes (nth (keys ast) i) "loop") (println (generate-loop (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i))) 
+      (str/includes? (nth (keys ast) i) "loop") (println (generate-loop (nth (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i)))) 
       :else (println (generate-label (nth (keys ast) i) (map brainfuck-to-assembly (nth (vals ast) i)))))))
 
