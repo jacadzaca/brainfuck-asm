@@ -16,12 +16,12 @@
 
 (defn- balanced?
   "Returns whether brackets contained in the string are balanced"
-  ([expr] (balanced? (clojure.string/split expr #"") 0))
+  ([expr] (balanced? expr 0))
   ([[x & xs] count]
    (cond (neg? count) false
          (nil? x) (zero? count)
-         (= x "[") (recur xs (inc count))
-         (= x "]") (recur xs (dec count))
+         (= x \[) (recur xs (inc count))
+         (= x \]) (recur xs (dec count))
          :else (recur xs count))))
 
 (defn- create-statement
