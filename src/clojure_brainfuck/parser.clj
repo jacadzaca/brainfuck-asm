@@ -46,24 +46,25 @@
     \, (create-statement :call-read)
     (throw (IllegalArgumentException. (format "%s is not a valid brainfuck symbol" character)))))
 
-(defn generate-ast [string]
-  {:pre [(and (string? string) (balanced? string))]}
-  (loop [ast () current-label {:type :entrypoint :statements []} stack () i 0 loop-count 0]
-    (if (= (count string) i)
-      (apply conj ast current-label stack)
-      (case (nth string i)
-        \[ (recur ast
-                  (craete-loop (str "loop" loop-count))
-                  (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
-                  (inc i)
-                  (inc loop-count))
-        \] (recur (conj ast current-label)
-                  (first stack)
-                  (pop stack)
-                  (inc i)
-                  loop-count)
-        (recur ast
-               (update current-label :statements conj (brainfuck->ast-node (nth string i)))
-               stack
-               (inc i)
-               loop-count)))))
+(defn generate-ast 
+  ([string]
+   {:pre [(and (string? string) (balanced? string))]}
+     (generate-ast '() {:type :entrypoint :statements []} '() string 0))
+  ([ast current-label stack [character & characters] loop-count]
+     (cond
+       (nil? character) (apply conj ast current-label stack)
+       (= character \[) (recur ast
+                               (craete-loop (str "loop" loop-count))
+                               (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
+                               characters
+                               (inc loop-count))
+       (= character \]) (recur (conj ast current-label)
+                               (first stack)
+                               (pop stack)
+                               characters
+                               loop-count)
+       :else            (recur ast
+                               (update current-label :statements conj (brainfuck->ast-node character))
+                               stack
+                               characters
+                               loop-count))))
