@@ -4,7 +4,7 @@
 (defn remove-initial-comment-loop [string]
   (if (str/starts-with? string "[")
     (loop [i 1 matching-bracket-count 1]
-      (if (= matching-bracket-count 0)
+      (if (zero? matching-bracket-count)
         (subs string i)
         (recur (inc i)
                (if (= (nth string i) \[)
@@ -18,11 +18,11 @@
   "Returns whether brackets contained in the string are balanced"
   ([expr] (balanced? (clojure.string/split expr #"") 0))
   ([[x & xs] count]
-    (cond (neg? count) false
-          (nil? x) (zero? count)
-          (= x "[") (recur xs (inc count))
-          (= x "]") (recur xs (dec count))
-          :else (recur xs count))))
+   (cond (neg? count) false
+         (nil? x) (zero? count)
+         (= x "[") (recur xs (inc count))
+         (= x "]") (recur xs (dec count))
+         :else (recur xs count))))
 
 (defn- create-statement
   ([type]
