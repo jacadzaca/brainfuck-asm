@@ -14,28 +14,40 @@
                    matching-bracket-count)))))
     string))
 
-(defn create-statement
+(defn- balanced?
+  "Returns whether brackets contained in the string are balanced"
+  ([expr] (balanced? (clojure.string/split expr #"") 0))
+  ([[x & xs] count]
+    (cond (neg? count) false
+          (nil? x) (zero? count)
+          (= x "[") (recur xs (inc count))
+          (= x "]") (recur xs (dec count))
+          :else (recur xs count))))
+
+(defn- create-statement
   ([type]
    {:type type})
   ([type arguemnt]
    {:type      type
     :arguemnt arguemnt}))
 
-(defn craete-loop [name]
+(defn- craete-loop [name]
   {:name name
    :type :loop
    :statements []})
 
-(defn brainfuck->ast-node [character]
+(defn- brainfuck->ast-node [character]
   (case character
     \+ (create-statement :inc)
     \- (create-statement :dec)
     \> (create-statement :inc-pointer)
     \< (create-statement :dec-pointer)
     \. (create-statement :call-print)
-    \, (create-statement :call-read)))
+    \, (create-statement :call-read)
+    (throw (IllegalArgumentException. (format "%s is not a valid brainfuck symbol" character)))))
 
 (defn generate-ast [string]
+  {:pre [(and (string? string) (balanced? string))]}
   (loop [ast () current-label {:type :entrypoint :statements []} stack () i 0 loop-count 0]
     (if (= (count string) i)
       (apply conj ast current-label stack)
