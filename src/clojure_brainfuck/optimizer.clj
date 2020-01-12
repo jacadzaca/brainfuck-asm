@@ -5,13 +5,13 @@
 (defn- optimize-two-statements [statement statement1]
   (cond 
     (= (statement :type) (statement1 :type) :inc)                                (parser/create-statement :add 2)
-    (= (statement :type) (statement1 :type) :dec)                                (parser/create-statement :dec 2)
+    (= (statement :type) (statement1 :type) :dec)                                (parser/create-statement :sub 2)
     (= (statement :type) (statement1 :type) :inc-pointer)                        (parser/create-statement :add-pointer 2)
-    (= (statement :type) (statement1 :type) :dec-pointer)                        (parser/create-statement :dec-pointer 2)
+    (= (statement :type) (statement1 :type) :dec-pointer)                        (parser/create-statement :sub-pointer 2)
     (and (= (statement :type) :add) (= (statement1 :type) :inc))                 (update statement :argument inc)
-    (and (= (statement :type) :dec) (= (statement1 :type) :dec))                 (update statement :argument inc)
+    (and (= (statement :type) :sub) (= (statement1 :type) :dec))                 (update statement :argument inc)
     (and (= (statement :type) :add-pointer) (= (statement1 :type) :inc-pointer)) (update statement :argument inc)
-    (and (= (statement :type) :dec-pointer) (= (statement1 :type) :dec-pointer)) (update statement :argument inc)
+    (and (= (statement :type) :sub-pointer) (= (statement1 :type) :dec-pointer)) (update statement :argument inc)
     :else                                                                        nil))
 
 (defn optimize-ast-node
