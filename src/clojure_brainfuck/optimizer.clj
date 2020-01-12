@@ -15,24 +15,13 @@
     :else                                                                        nil))
 
 (defn optimize-ast-node
-  ([ast-node]
-    (let [zipped-ast (zip/vector-zip ast-node)]
-    (optimize-ast-node (-> zipped-ast zip/next)
-                       (-> zipped-ast zip/next zip/node)
-                       (-> zipped-ast zip/next zip/next zip/node))))
-  ([ast-zipper statement next-statement]
-    (println (zip/node ast-zipper) statement next-statement)
+ ([ast-zipper]
     (if (-> ast-zipper zip/next zip/end?)
         (zip/root ast-zipper)
-        (let [replacement (optimize-two-statements statement next-statement)]
+        (let [replacement (optimize-two-statements (zip/node ast-zipper) (-> ast-zipper zip/next zip/node))]
           (case replacement
-            nil (recur (zip/next ast-zipper)
-                       (-> ast-zipper zip/next zip/node)
-                       (-> ast-zipper zip/next zip/next zip/node))
+            nil (recur (zip/next ast-zipper))
             (recur (-> ast-zipper
                        (zip/replace replacement)
                        zip/next
-                       zip/remove
-                       zip/next)
-                   (-> ast-zipper zip/next zip/next zip/node)
-                   (-> ast-zipper zip/next zip/next zip/next zip/node)))))))
+                       zip/remove)))))))
