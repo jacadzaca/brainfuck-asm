@@ -24,12 +24,12 @@
          (= x \]) (recur xs (dec count))
          :else (recur xs count))))
 
-(defn- create-statement
+(defn create-statement
   ([type]
    {:type type})
-  ([type arguemnt]
+  ([type argument]
    {:type      type
-    :arguemnt arguemnt}))
+    :argument argument}))
 
 (defn- craete-loop [name]
   {:name name
