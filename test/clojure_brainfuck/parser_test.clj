@@ -21,10 +21,10 @@
                                                      {:type :call-print}
                                                      {:type :call-read}]})
    "+[+[+]+]+" (list {:type :entrypoint, :statements [{:type :inc}
-                                                      {:type :call-loop, :arguemnt 0}
+                                                      {:type :call-loop, :argument 0}
                                                       {:type :inc}]}
                      {:name "loop0", :type :loop, :statements [{:type :inc}
-                                                               {:type :call-loop, :arguemnt 1}
+                                                               {:type :call-loop, :argument 1}
                                                                {:type :inc}]}
                      {:name "loop1", :type :loop, :statements [{:type :inc}]})})
 
