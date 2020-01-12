@@ -14,14 +14,17 @@
     (and (= (statement :type) :sub-pointer) (= (statement1 :type) :dec-pointer)) (update statement :argument inc)
     :else                                                                        nil))
 
-(defn optimize-ast-node
- ([ast-zipper]
-    (if (-> ast-zipper zip/next zip/end?)
-        (zip/root ast-zipper)
-        (let [replacement (optimize-two-statements (zip/node ast-zipper) (-> ast-zipper zip/next zip/node))]
+(defn- optimize-sentence-zipper
+ ([sentence-zipper]
+    (if (-> sentence-zipper zip/next zip/end?)
+        (zip/root sentence-zipper)
+        (let [replacement (optimize-two-statements (zip/node sentence-zipper) (-> sentence-zipper zip/next zip/node))]
           (case replacement
-            nil (recur (zip/next ast-zipper))
-            (recur (-> ast-zipper
+            nil (recur (zip/next sentence-zipper))
+            (recur (-> sentence-zipper
                        (zip/replace replacement)
                        zip/next
                        zip/remove)))))))
+
+(defn optimize-sentence [sentence]
+  (optimize-sentence-zipper (-> sentence zip/vector-zip zip/next)))
