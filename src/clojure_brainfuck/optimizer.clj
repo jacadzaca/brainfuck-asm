@@ -3,7 +3,9 @@
             [clojure.zip :as zip]))
 
 (defn- optimize-two-statements [statement statement1]
-  (cond 
+  "Defines the rules for optimzing statements.
+  Returns nil if statements cannot be optimized, else the combination of statements"
+  (cond
     (= (statement :type) (statement1 :type) :inc)                                (parser/create-statement :add 2)
     (= (statement :type) (statement1 :type) :dec)                                (parser/create-statement :sub 2)
     (= (statement :type) (statement1 :type) :inc-pointer)                        (parser/create-statement :add-pointer 2)
@@ -15,7 +17,8 @@
     :else                                                                        nil))
 
 (defn- optimize-sentence-zipper
- ([sentence-zipper]
+  "Takes a zipped sentence and optimizes it"
+  ([sentence-zipper]
     (if (-> sentence-zipper zip/next zip/end?)
         (zip/root sentence-zipper)
         (let [replacement (optimize-two-statements (zip/node sentence-zipper) (-> sentence-zipper zip/next zip/node))]
@@ -27,4 +30,6 @@
                        zip/remove)))))))
 
 (defn optimize-sentence [sentence]
+  "Turns a vector of statements (sentence) into an optimized sentence.
+  Returns a vector"
   (optimize-sentence-zipper (-> sentence zip/vector-zip zip/next)))
