@@ -65,19 +65,3 @@
                             {:type :inc}
                             {:type :dec}]]
     (is (= unoptimizable-code (optimizer/optimize-ast-node unoptimizable-code)))))
-
-;; That is a bad name
-(deftest handles-complicated-sentences-test
-  (let [sentence           [{:type :dec}
-                            {:type :dec}
-                            {:type :dec}
-                            {:type :inc}
-                            {:type :inc}
-                            {:type :inc}
-                            {:type :dec}
-                            {:type :inc}]
-        optimized-sentence [{:type :sub :argument 3}
-                            {:type :add :argument 3}
-                            {:type :inc}
-                            {:type :dec}]]
-    (is (= optimized-sentence (optimizer/optimize-ast-node sentence)))))
