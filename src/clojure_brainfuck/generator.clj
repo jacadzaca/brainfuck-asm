@@ -7,9 +7,6 @@
 (defn- generate-label [name & statements]
   (str name \: \newline (str/join \newline (flatten statements)) \newline))
 
-(defn- generate-loop [name statements]
-  (generate-label name statements "cmp byte [eax], 0" (str "jne " name) "ret"))
-
 (def :private print-character
   (generate-label "print_character" "push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax"
                                      "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"))
