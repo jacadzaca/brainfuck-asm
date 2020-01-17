@@ -14,7 +14,7 @@
   (generate-label "print_character" "push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax"
                                      "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"))
 
-(def ^:private exit (generate-label "exit" "    mov eax, 1" "    xor ebx, ebx" "    int 0x80"))
+(def ^:private exit "    mov eax, 1\n    xor ebx, ebx\n    int 0x80")
 
 (defn- statement->asm [statement]
   "Translates an statement to assembly code"
