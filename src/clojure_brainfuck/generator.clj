@@ -7,6 +7,9 @@
 (defn- generate-label [name & statements]
   (str \newline name \: \newline (str/join \newline (flatten statements)) \newline))
 
+(defn- generate-loop-condition [statement]
+  (format "    cmp byte [eax], 0\n    jne %s\n    ret" (:argument statement)))
+
 (def ^:private print-character
   (generate-label "print_character" "push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax"
                                      "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"))
@@ -27,6 +30,7 @@
     :call-print  "    call print"
     :call-read   "    call read"
     :call-loop   (str "    call loop" (:argument statement))
+    :loop-end    (generate-loop-condition statement)
     (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))
 
 (defn generate-assembly [ast]
