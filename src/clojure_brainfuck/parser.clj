@@ -52,13 +52,13 @@
      (generate-ast '() {:type :entrypoint :statements []} '() string 0))
   ([ast current-label stack [character & characters] loop-count]
      (cond
-       (nil? character) (apply conj ast current-label stack)
+       (nil? character) (apply conj ast (update current-label :statements conj (create-statement :call-exit)) stack)
        (= character \[) (recur ast
                                (craete-loop (str "loop" loop-count))
                                (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
                                characters
                                (inc loop-count))
-       (= character \]) (recur (conj ast current-label)
+       (= character \]) (recur (conj ast (update current-label :statements conj (create-statement :loop-end loop-count)))
                                (first stack)
                                (pop stack)
                                characters

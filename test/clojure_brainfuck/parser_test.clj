@@ -19,14 +19,17 @@
                                                      {:type :inc-pointer}
                                                      {:type :dec-pointer}
                                                      {:type :call-print}
-                                                     {:type :call-read}]})
+                                                     {:type :call-read}
+                                                     {:type :call-exit}]})
    "+[+[+]+]+" (list {:type :entrypoint, :statements [{:type :inc}
                                                       {:type :call-loop, :argument 0}
-                                                      {:type :inc}]}
+                                                      {:type :inc}
+                                                      {:type :call-exit}]}
                      {:name "loop0", :type :loop, :statements [{:type :inc}
                                                                {:type :call-loop, :argument 1}
-                                                               {:type :inc}]}
-                     {:name "loop1", :type :loop, :statements [{:type :inc}]})})
+                                                               {:type :inc}
+                                                               {:type :loop-end}]}
+                     {:name "loop1", :type :loop, :statements [{:type :inc} {:type :loop-end}]})})
 
 (deftest generates-valid-ast
   (doseq [[code ast] asts]
