@@ -55,6 +55,9 @@
 (deftest call-loop-statement-properly-translated
   (is (re-matches #"( |\t)*call loop1" (@#'generator/statement->asm {:type :call-loop :argument 1}))))
 
+(deftest call-exit-statement-properly-translated
+  (is (re-matches #"( |\t)*mov eax, 1\n( |\t)*xor ebx, ebx\n( |\t)*int 0x80" (@#'generator/statement->asm {:type :call-exit}))))
+
 (deftest loop-end-statement-properly-translated
   (is (re-matches #"( |\t)*cmp byte \[eax\], 0\n( |\t)*jne loop1\n( |\t)*ret" (@#'generator/statement->asm {:type :loop-end :argument "loop1"}))))
 

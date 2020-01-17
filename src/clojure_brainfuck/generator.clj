@@ -30,6 +30,7 @@
     :call-print  "    call print"
     :call-read   "    call read"
     :call-loop   (str "    call loop" (:argument statement))
+    :call-exit   exit
     :loop-end    (generate-loop-condition statement)
     (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))
 
@@ -38,5 +39,4 @@
     (generate-segment "bss" "    array: resb 30000")
     \newline
     (generate-segment "text" "    global _start")
-    (apply str (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
-    exit))
+    (apply str (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))))
