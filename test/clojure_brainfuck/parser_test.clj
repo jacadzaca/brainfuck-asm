@@ -28,9 +28,9 @@
                      {:name "loop0", :type :loop, :statements [{:type :inc}
                                                                {:type :call-loop, :argument 1}
                                                                {:type :inc}
-                                                               {:type :loop-end}]}
-                     {:name "loop1", :type :loop, :statements [{:type :inc} {:type :loop-end}]})})
+                                                               {:type :loop-end :argument "loop0"}]}
+                     {:name "loop1", :type :loop, :statements [{:type :inc} {:type :loop-end :argument "loop1"}]})})
 
 (deftest generates-valid-ast
   (doseq [[code ast] asts]
-    (is (= (parser/generate-ast code) ast))))
+    (is (= ast (parser/generate-ast code)))))

@@ -58,7 +58,7 @@
                                (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
                                characters
                                (inc loop-count))
-       (= character \]) (recur (conj ast (update current-label :statements conj (create-statement :loop-end loop-count)))
+       (= character \]) (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
                                (first stack)
                                (pop stack)
                                characters
