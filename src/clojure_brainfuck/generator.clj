@@ -30,9 +30,9 @@
     (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))
 
 (defn generate-assembly [ast]
-  (apply str
+  (str
     (generate-segment "bss" "array: resb 30000")
     \newline
     (generate-segment "text" "global _start")
-    (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast)
+    (apply str (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
     exit))
