@@ -26,7 +26,8 @@
     :sub-pointer (str "sub eax, " (:argument statement))
     :call-print  "call print"
     :call-read   "call read"
-    :call-loop   (str "call loop" (:argument statement))))
+    :call-loop   (str "call loop" (:argument statement))
+    (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))
 
 (defn generate-assembly [ast]
   (apply str
