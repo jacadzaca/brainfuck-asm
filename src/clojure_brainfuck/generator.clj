@@ -11,7 +11,7 @@
   (format "    cmp byte [eax], 0\n    jne %s\n    ret" (:argument statement)))
 
 (def ^:private print-character
-  (generate-label "print_character" "push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax"
+  (generate-label "print" "push eax" "push ecx" "push ebx" "push edx" "mov ecx, eax"
                                      "mov eax, 0x04" "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop edx" "pop ebx" "pop ecx" "pop eax" "ret"))
 
 (def ^:private exit "    mov eax, 1\n    xor ebx, ebx\n    int 0x80")
@@ -39,4 +39,5 @@
     (generate-segment "bss" "    array: resb 30000")
     \newline
     (generate-segment "text" "    global _start")
-    (apply str (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))))
+    (apply str (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
+    print-character))
