@@ -14,7 +14,7 @@
   ["cmp byte [eax], 0" (str "jne " (:argument statement)) "ret"])
 
 (def ^:private ^:const print-cell
-  (generate-label "print-cell" "push eax" "mov ecx, eax" "mov eax, 0x04"
+  (generate-label "print_cell" "push eax" "mov ecx, eax" "mov eax, 0x04"
                           "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop eax" "ret"))
 
 (def ^:private ^:const exit ["mov eax, 1" "xor ebx, ebx" "int 0x80"])
@@ -30,8 +30,8 @@
     :sub         (str "sub byte [eax], " (:argument statement))
     :add-pointer (str "add eax, " (:argument statement))
     :sub-pointer (str "sub eax, " (:argument statement))
-    :call-print  "all print_cell"
-    :call-read   "all read"
+    :call-print  "call print_cell"
+    :call-read   "call read"
     :call-loop   (str "all loop" (:argument statement))
     :call-exit   exit
     :loop-end    (generate-loop-condition statement)
