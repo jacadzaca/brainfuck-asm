@@ -35,6 +35,7 @@
     :call-loop   (str "call loop" (:argument statement))
     :call-exit   exit
     :loop-end    (generate-loop-condition statement)
+    :load-array  "mov eax, array"
     (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))
 
 (defn generate-assembly [ast]

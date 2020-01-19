@@ -14,14 +14,16 @@
   (is (thrown? IllegalArgumentException (parser/generate-ast "asdf"))))
 
 (def ^:private asts
-  {"+-><.,"   (list {:type :entrypoint, :statements [{:type :inc}
+  {"+-><.,"   (list {:type :entrypoint, :statements [{:type :load-array}
+                                                     {:type :inc}
                                                      {:type :dec}
                                                      {:type :inc-pointer}
                                                      {:type :dec-pointer}
                                                      {:type :call-print}
                                                      {:type :call-read}
                                                      {:type :call-exit}]})
-   "+[+[+]+]+" (list {:type :entrypoint, :statements [{:type :inc}
+   "+[+[+]+]+" (list {:type :entrypoint, :statements [{:type :load-array}
+                                                      {:type :inc}
                                                       {:type :call-loop, :argument 0}
                                                       {:type :inc}
                                                       {:type :call-exit}]}
