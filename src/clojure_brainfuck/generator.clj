@@ -32,7 +32,7 @@
     :sub-pointer (str "sub eax, " (:argument statement))
     :call-print  "call print_cell"
     :call-read   "call read"
-    :call-loop   (str "all loop" (:argument statement))
+    :call-loop   (str "call loop" (:argument statement))
     :call-exit   exit
     :loop-end    (generate-loop-condition statement)
     (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))

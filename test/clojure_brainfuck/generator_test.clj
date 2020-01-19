@@ -23,43 +23,43 @@
     (is (re-find #"segment .text\n\s*\w*\s*global _start\n" generated-asm))))
 
 (deftest inc-statement-properly-translated
-  (is (re-matches #"( |\t)*inc byte \[eax\]" (@#'generator/statement->asm {:type :inc}))))
+  (is (= "inc byte [eax]" (@#'generator/statement->asm {:type :inc}))))
 
 (deftest dec-statement-properly-translated
-  (is (re-matches #"( |\t)*dec byte \[eax\]" (@#'generator/statement->asm {:type :dec}))))
+  (is (= "dec byte [eax]" (@#'generator/statement->asm {:type :dec}))))
 
 (deftest inc-pointer-statement-properly-translated
-  (is (re-matches #"( |\t)*inc eax" (@#'generator/statement->asm {:type :inc-pointer}))))
+  (is (= "inc eax" (@#'generator/statement->asm {:type :inc-pointer}))))
 
 (deftest dec-pointer-statement-properly-translated
-  (is (re-matches #"( |\t)*dec eax" (@#'generator/statement->asm {:type :dec-pointer}))))
+  (is (= "dec eax" (@#'generator/statement->asm {:type :dec-pointer}))))
 
 (deftest add-statement-properly-translated
-  (is (re-matches #"( |\t)*add byte \[eax\], 2" (@#'generator/statement->asm {:type :add :argument 2}))))
+  (is (= "add byte [eax], 2" (@#'generator/statement->asm {:type :add :argument 2}))))
 
 (deftest sub-statement-properly-translated
-  (is (re-matches #"( |\t)*sub byte \[eax\], 2" (@#'generator/statement->asm {:type :sub :argument 2}))))
+  (is (= "sub byte [eax], 2" (@#'generator/statement->asm {:type :sub :argument 2}))))
 
 (deftest add-pointer-statement-properly-translated
-  (is (re-matches #"( |\t)*add eax, 2" (@#'generator/statement->asm {:type :add-pointer :argument 2}))))
+  (is (= "add eax, 2" (@#'generator/statement->asm {:type :add-pointer :argument 2}))))
 
 (deftest sub-pointer-statement-properly-translated
-  (is (re-matches #"( |\t)*sub eax, 2" (@#'generator/statement->asm {:type :sub-pointer :argument 2}))))
+  (is (= "sub eax, 2" (@#'generator/statement->asm {:type :sub-pointer :argument 2}))))
 
 (deftest call-print-statement-properly-translated
-  (is (re-matches #"( |\t)*call print" (@#'generator/statement->asm {:type :call-print}))))
+  (is (= "call print_cell" (@#'generator/statement->asm {:type :call-print}))))
 
 (deftest call-read-statement-properly-translated
-  (is (re-matches #"( |\t)*call read" (@#'generator/statement->asm {:type :call-read}))))
+  (is (= "call read" (@#'generator/statement->asm {:type :call-read}))))
 
 (deftest call-loop-statement-properly-translated
-  (is (re-matches #"( |\t)*call loop1" (@#'generator/statement->asm {:type :call-loop :argument 1}))))
+  (is (= "call loop1" (@#'generator/statement->asm {:type :call-loop :argument 1}))))
 
 (deftest call-exit-statement-properly-translated
-  (is (re-matches #"( |\t)*mov eax, 1\n( |\t)*xor ebx, ebx\n( |\t)*int 0x80" (@#'generator/statement->asm {:type :call-exit}))))
+  (is (= ["mov eax, 1" "xor ebx, ebx" "int 0x80"] (@#'generator/statement->asm {:type :call-exit}))))
 
 (deftest loop-end-statement-properly-translated
-  (is (re-matches #"( |\t)*cmp byte \[eax\], 0\n( |\t)*jne loop1\n( |\t)*ret" (@#'generator/statement->asm {:type :loop-end :argument "loop1"}))))
+  (is (= ["cmp byte [eax], 0" (str "jne " "loop1") "ret"] (@#'generator/statement->asm {:type :loop-end :argument "loop1"}))))
 
 (deftest statement->asm-throws-illegal-argument-when-cannot-translate-statement
   (is (thrown-with-msg? IllegalArgumentException #":invalid is not a proper statement type" (@#'generator/statement->asm {:type :invalid}))))
