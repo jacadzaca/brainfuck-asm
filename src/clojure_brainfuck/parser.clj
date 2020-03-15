@@ -53,18 +53,18 @@
   ([ast current-label stack [character & characters] loop-count]
      (case character
        nil (apply conj ast (update current-label :statements conj (create-statement :call-exit)) stack)
-       \[ (recur ast
-            (craete-loop (str "loop" loop-count))
-            (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
-            characters
-            (inc loop-count))
-       \] (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
-            (first stack)
-            (pop stack)
-            characters
-            loop-count)
-          (recur ast
-            (update current-label :statements conj (brainfuck->ast-node character))
-            stack
-            characters
-            loop-count))))
+       \[  (recur ast
+             (craete-loop (str "loop" loop-count))
+             (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
+             characters
+             (inc loop-count))
+       \]  (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
+             (first stack)
+             (pop stack)
+             characters
+             loop-count)
+           (recur ast
+             (update current-label :statements conj (brainfuck->ast-node character))
+             stack
+             characters
+             loop-count))))
