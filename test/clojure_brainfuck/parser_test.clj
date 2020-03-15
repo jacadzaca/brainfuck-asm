@@ -2,9 +2,6 @@
   (:require [clojure.test :refer [deftest is]]
             [clojure-brainfuck.parser :as parser]))
 
-(deftest throws-assertion-error-if-the-argument-is-not-a-string-test
-  (is (thrown? AssertionError (parser/generate-ast 123))))
-
 (deftest throws-assertion-error-when-bracket-is-not-closed-test
   (is (thrown? AssertionError (parser/generate-ast "[+++][")))
   (is (thrown? AssertionError (parser/generate-ast "[+++[")))
