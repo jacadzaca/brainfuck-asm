@@ -51,20 +51,20 @@
    {:pre [(balanced? string)]}
      (generate-ast '() {:type :entrypoint :statements [{:type :load-array}]} '() string 0))
   ([ast current-label stack [character & characters] loop-count]
-     (cond
-       (nil? character) (apply conj ast (update current-label :statements conj (create-statement :call-exit)) stack)
-       (= character \[) (recur ast
-                               (craete-loop (str "loop" loop-count))
-                               (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
-                               characters
-                               (inc loop-count))
-       (= character \]) (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
-                               (first stack)
-                               (pop stack)
-                               characters
-                               loop-count)
-       :else            (recur ast
-                               (update current-label :statements conj (brainfuck->ast-node character))
-                               stack
-                               characters
-                               loop-count))))
+     (case character
+       nil (apply conj ast (update current-label :statements conj (create-statement :call-exit)) stack)
+       \[ (recur ast
+            (craete-loop (str "loop" loop-count))
+            (conj stack (update current-label :statements conj (create-statement :call-loop loop-count)))
+            characters
+            (inc loop-count))
+       \] (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
+            (first stack)
+            (pop stack)
+            characters
+            loop-count)
+          (recur ast
+            (update current-label :statements conj (brainfuck->ast-node character))
+            stack
+            characters
+            loop-count))))
