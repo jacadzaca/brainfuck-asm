@@ -15,7 +15,7 @@
     string))
 
 (defn- balanced?
-  "Returns whether brackets contained in the string are balanced"
+  "Returns whether brackets contained in expr are balanced"
   ([expr] (balanced? expr 0))
   ([[x & xs] count]
    (cond (neg? count) false
