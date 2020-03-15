@@ -48,7 +48,7 @@
 
 (defn generate-ast 
   ([string]
-   {:pre [(and (string? string) (balanced? string))]}
+   {:pre [(balanced? string)]}
      (generate-ast '() {:type :entrypoint :statements [{:type :load-array}]} '() string 0))
   ([ast current-label stack [character & characters] loop-count]
      (cond
