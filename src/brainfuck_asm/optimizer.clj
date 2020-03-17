@@ -2,9 +2,10 @@
   (:require [brainfuck-asm.parser :as parser]
             [clojure.zip :as zip]))
 
-(defn- optimize-two-statements [statement statement1]
+(defn- optimize-two-statements
   "Defines the rules for optimzing statements.
   Returns nil if statements cannot be optimized, else the combination of statements"
+  [statement statement1]
   (cond
     (= (statement :type) (statement1 :type) :inc)                                (parser/create-statement :add 2)
     (= (statement :type) (statement1 :type) :dec)                                (parser/create-statement :sub 2)
@@ -29,7 +30,8 @@
                        zip/next
                        zip/remove)))))))
 
-(defn optimize-sentence [sentence]
+(defn optimize-sentence
   "Turns a vector of statements (sentence) into an optimized sentence.
   Returns a vector"
+  [sentence]
   (optimize-sentence-zipper (-> sentence zip/vector-zip zip/next)))

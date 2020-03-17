@@ -23,8 +23,9 @@
 
 (def ^:private ^:const exit ["mov eax, 1" "xor ebx, ebx" "int 0x80"])
 
-(defn- statement->asm [statement]
+(defn- statement->asm
   "Translates an statement to assembly code"
+  [statement]
   (case (:type statement)
     :inc         "inc byte [eax]"
     :dec         "dec byte [eax]"
