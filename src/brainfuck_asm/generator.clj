@@ -47,6 +47,6 @@
     (generate-segment "bss" "array: resb 30000")
     \newline
     (generate-segment "text" "global _start")
-    (apply str (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
+    (str/join (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
     print-cell
     read-definition))
