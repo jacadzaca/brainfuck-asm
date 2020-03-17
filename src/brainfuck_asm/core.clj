@@ -11,5 +11,5 @@
   (let [legal-characters #{\+ \- \< \> \. \, \[ \]}]
     (filter #(contains? legal-characters %) input)))
 
-(defn -main [input-file-name & args]
+(defn -main [input-file-name]
   (-> input-file-name slurp parser/remove-initial-comment-loop sanitize-input parser/generate-ast optimize-ast generator/generate-assembly print))
