@@ -15,11 +15,11 @@
 
 (def ^:private ^:const print-cell
   (generate-label "print_cell" "push eax" "mov ecx, eax" "mov eax, 0x04"
-                          "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop eax" "ret"))
+                  "mov ebx, 0x01" "mov edx, 0x01" "int 0x80" "pop eax" "ret"))
 
 (def ^:private ^:const read-definition
   (generate-label "read" "mov ecx, eax" "push eax" "mov eax, 0x03" "mov ebx, 0x00"
-                          "mov edx, 0x01" "int 0x80" "pop eax" "ret"))
+                  "mov edx, 0x01" "int 0x80" "pop eax" "ret"))
 
 (def ^:private ^:const exit ["mov eax, 1" "xor ebx, ebx" "int 0x80"])
 
@@ -45,9 +45,9 @@
 
 (defn generate-assembly [ast]
   (str
-    (generate-segment "bss" "array: resb 30000")
-    \newline
-    (generate-segment "text" "global _start")
-    (str/join (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
-    print-cell
-    read-definition))
+   (generate-segment "bss" "array: resb 30000")
+   \newline
+   (generate-segment "text" "global _start")
+   (str/join (map #(apply generate-label (:name % "_start") (map statement->asm (:statements %))) ast))
+   print-cell
+   read-definition))

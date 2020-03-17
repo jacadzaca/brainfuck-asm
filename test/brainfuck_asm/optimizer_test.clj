@@ -12,7 +12,7 @@
 
 (deftest combines-two-inc-pointer-instructions-into-pointer-addition-test
   (is (= [{:type :add-pointer :argument 2}] (optimizer/optimize-sentence [{:type :inc-pointer}
-                                                                           {:type :inc-pointer}]))))
+                                                                          {:type :inc-pointer}]))))
 
 (deftest combines-two-dec-pointer-instructions-into-pointer-substracion-test
   (is (= [{:type :sub-pointer :argument 2}] (optimizer/optimize-sentence [{:type :dec-pointer}
@@ -20,10 +20,10 @@
 
 (deftest combines-multiple-dec-instructions-into-substracion-test
   (is (= [{:type :sub :argument 5}] (optimizer/optimize-sentence [{:type :dec}
-                                                                   {:type :dec}
-                                                                   {:type :dec}
-                                                                   {:type :dec}
-                                                                   {:type :dec}]))))
+                                                                  {:type :dec}
+                                                                  {:type :dec}
+                                                                  {:type :dec}
+                                                                  {:type :dec}]))))
 
 (deftest combines-multiple-inc-instructions-into-addition-test
   (is (= [{:type :add :argument 4}] (optimizer/optimize-sentence [{:type :inc}

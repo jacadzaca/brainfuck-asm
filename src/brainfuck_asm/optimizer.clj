@@ -20,15 +20,15 @@
 (defn- optimize-sentence-zipper
   "Takes a zipped sentence and optimizes it"
   ([sentence-zipper]
-    (if (-> sentence-zipper zip/next zip/end?)
-        (zip/root sentence-zipper)
-        (let [replacement (optimize-two-statements (zip/node sentence-zipper) (-> sentence-zipper zip/next zip/node))]
-          (case replacement
-            nil (recur (zip/next sentence-zipper))
-            (recur (-> sentence-zipper
-                       (zip/replace replacement)
-                       zip/next
-                       zip/remove)))))))
+   (if (-> sentence-zipper zip/next zip/end?)
+     (zip/root sentence-zipper)
+     (let [replacement (optimize-two-statements (zip/node sentence-zipper) (-> sentence-zipper zip/next zip/node))]
+       (case replacement
+         nil (recur (zip/next sentence-zipper))
+         (recur (-> sentence-zipper
+                    (zip/replace replacement)
+                    zip/next
+                    zip/remove)))))))
 
 (defn optimize-sentence
   "Turns a vector of statements (sentence) into an optimized sentence.
