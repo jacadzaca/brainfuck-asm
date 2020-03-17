@@ -1,6 +1,6 @@
-(ns clojure-brainfuck.parser-test
+(ns brainfuck-asm.parser-test
   (:require [clojure.test :refer [deftest is]]
-            [clojure-brainfuck.parser :as parser]))
+            [brainfuck-asm.parser :as parser]))
 
 (deftest throws-assertion-error-when-bracket-is-not-closed-test
   (is (thrown? AssertionError (parser/generate-ast "[+++][")))

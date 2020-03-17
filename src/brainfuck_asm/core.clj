@@ -1,7 +1,7 @@
-(ns clojure-brainfuck.core
-  (:require [clojure-brainfuck.parser :as parser]
-            [clojure-brainfuck.optimizer :as optimizer]
-            [clojure-brainfuck.generator :as generator])
+(ns brainfuck-asm.core
+  (:require [brainfuck-asm.parser :as parser]
+            [brainfuck-asm.optimizer :as optimizer]
+            [brainfuck-asm.generator :as generator])
   (:gen-class))
 
 (defn- optimize-ast [ast]

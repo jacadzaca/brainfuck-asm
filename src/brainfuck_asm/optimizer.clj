@@ -1,5 +1,5 @@
-(ns clojure-brainfuck.optimizer
-  (:require [clojure-brainfuck.parser :as parser]
+(ns brainfuck-asm.optimizer
+  (:require [brainfuck-asm.parser :as parser]
             [clojure.zip :as zip]))
 
 (defn- optimize-two-statements [statement statement1]

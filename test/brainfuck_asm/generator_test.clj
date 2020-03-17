@@ -1,7 +1,7 @@
-(ns clojure-brainfuck.generator-test
+(ns brainfuck-asm.generator-test
   (:require [clojure.test :refer [deftest is]]
             [clojure.string :as str]
-            [clojure-brainfuck.generator :as generator]))
+            [brainfuck-asm.generator :as generator]))
 
 (let [generated-asm (generator/generate-assembly {})]
   (deftest generates-bss-segement-test

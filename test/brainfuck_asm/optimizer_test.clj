@@ -1,6 +1,6 @@
-(ns clojure-brainfuck.optimizer-test
+(ns brainfuck-asm.optimizer-test
   (:require [clojure.test :refer [deftest is]]
-            [clojure-brainfuck.optimizer :as optimizer]))
+            [brainfuck-asm.optimizer :as optimizer]))
 
 (deftest combines-two-inc-instructions-into-addition-test
   (is (= [{:type :add :argument 2}] (optimizer/optimize-sentence [{:type :inc}

@@ -1,4 +1,4 @@
-(ns clojure-brainfuck.parser
+(ns brainfuck-asm.parser
   (:require [clojure.string :as str]))
 
 (defn remove-initial-comment-loop [string]
