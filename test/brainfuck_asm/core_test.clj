@@ -13,5 +13,5 @@
   (is (= "asdf[]" (@#'core/remove-initial-comment-loop "[asdf[[]]++]asdf[]"))))
 
 (deftest remove-illegal-characters-test
-  (is (= "+++[]-" (@#'core/remove-illegal-characters "asfa++asfag[]")))
-  (is (= "-<>,."  (@#'core/remove-illegal-characters "xac-asfasfsa<>,safa'''."))))
+  (is (= '(\+ \+ \[ \]) (@#'core/remove-illegal-characters "asfa++asfag[]")))
+  (is (= '(\- \< \> \, \.)  (@#'core/remove-illegal-characters "xac-asfasfsa<>,safa'''."))))
