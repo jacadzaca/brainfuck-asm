@@ -2,21 +2,22 @@
   (:require [brainfuck-asm.parser :as parser]
             [brainfuck-asm.optimizer :as optimizer]
             [brainfuck-asm.generator :as generator]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.string :as str])
   (:gen-class))
 
-(defn remove-initial-comment-loop [string]
-  (if (str/starts-with? string "[")
-    (loop [i 1 matching-bracket-count 1]
-      (if (zero? matching-bracket-count)
-        (subs string i)
-        (recur (inc i)
-               (if (= (nth string i) \[)
-                 (inc matching-bracket-count)
-                 (if (= (nth string i) \])
-                   (dec matching-bracket-count)
-                   matching-bracket-count)))))
-    string))
+(defn- remove-initial-comment-loop 
+  ([sequence] (case (first sequence)
+                \[ (remove-initial-comment-loop (drop 1 sequence) 1)
+                sequence))
+  ([[character & chars] matching-bracket-count]
+    {:pre (not= character nil)}
+    (if (zero? matching-bracket-count)
+      (str/join character chars)
+      (recur chars (case character
+                     \[ (inc matching-bracket-count)
+                     \] (dec matching-bracket-count)
+                     matching-bracket-count)))))
 
 (defn- optimize-ast [ast]
   (map #(update % :statements optimizer/optimize-sentence) ast))
@@ -31,8 +32,8 @@
       (= input-file-name nil) (println "Please specify a brainfuck source file to compile")
       (.exists (io/file input-file-name))
         (-> (first args) 
-            slurp 
-            parser/remove-initial-comment-loop
+            slurp
+            remove-initial-comment-loop
             sanitize-input 
             parser/generate-ast 
             optimize-ast 
