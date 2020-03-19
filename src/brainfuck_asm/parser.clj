@@ -1,7 +1,7 @@
 (ns brainfuck-asm.parser
   (:require [clojure.string :as str]))
 
-(defn- balanced?
+(defn balanced?
   "Returns whether brackets contained in expr are balanced"
   ([expr] (balanced? expr 0))
   ([[x & xs] count]
