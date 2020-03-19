@@ -22,7 +22,7 @@
 (defn- optimize-ast [ast]
   (map #(update % :statements optimizer/optimize-sentence) ast))
 
-(defn ^:private ^:const sanitize-input [input]
+(defn ^:private ^:const remove-illegal-characters [input]
   (let [legal-characters #{\+ \- \< \> \. \, \[ \]}]
     (filter #(contains? legal-characters %) input)))
 
@@ -34,7 +34,7 @@
         (let [brainfuck-code (slurp input-file-name)]
         (if (parser/balanced? brainfuck-code) 
           (-> brainfuck-code
-                      sanitize-input 
+                      remove-illegal-characters 
                       remove-initial-comment-loop
                       parser/generate-ast 
                       optimize-ast 
