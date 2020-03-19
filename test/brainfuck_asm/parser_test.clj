@@ -10,6 +10,12 @@
 (deftest throws-illegal-argument-exception-when-encounters-bad-symbol-test
   (is (thrown? IllegalArgumentException (parser/generate-ast "asdf"))))
 
+(deftest returns-true-if-brackets-balanced-test
+  (is (parser/balanced? "[[+[+]+]]+")))
+
+(deftest returns-false-if-brackets-unbalanced-test
+  (is (not (parser/balanced? "+[[[[+]]+++]"))))
+
 (def ^:private asts
   {"+-><.,"   (list {:type :entrypoint, :statements [{:type :load-array}
                                                      {:type :inc}
