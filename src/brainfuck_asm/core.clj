@@ -34,8 +34,8 @@
         (let [brainfuck-code (slurp input-file-name)]
         (if (parser/balanced? brainfuck-code) 
           (-> brainfuck-code
-                      remove-initial-comment-loop
                       sanitize-input 
+                      remove-initial-comment-loop
                       parser/generate-ast 
                       optimize-ast 
                       generator/generate-assembly 
