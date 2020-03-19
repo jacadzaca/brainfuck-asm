@@ -11,13 +11,13 @@
                 \[ (remove-initial-comment-loop (drop 1 sequence) 1)
                 sequence))
   ([[character & chars] matching-bracket-count]
-    {:pre (not= character nil)}
-    (if (zero? matching-bracket-count)
-      (str/join character chars)
-      (recur chars (case character
-                     \[ (inc matching-bracket-count)
-                     \] (dec matching-bracket-count)
-                     matching-bracket-count)))))
+    (cond
+      (nil? character) (throw (IllegalArgumentException. "Unbalanced braces"))
+      (zero? matching-bracket-count)  (str character (str/join chars))
+      (not= 0 matching-bracket-count) (recur chars (case character
+                                        \[ (inc matching-bracket-count)
+                                        \] (dec matching-bracket-count)
+                                        matching-bracket-count)))))
 
 (defn- optimize-ast [ast]
   (map #(update % :statements optimizer/optimize-sentence) ast))
