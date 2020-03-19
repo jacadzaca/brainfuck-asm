@@ -1,0 +1,2 @@
+#!/bin/sh
+lein do test, kibit, eastwood, cljfmt fix src/brainfuck_asm/* test/brainfuck_asm/* && clj-kondo --lint src/brainfuck_asm/* test/brainfuck_asm/*
