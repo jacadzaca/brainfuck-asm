@@ -5,6 +5,19 @@
             [clojure.java.io :as io])
   (:gen-class))
 
+(defn remove-initial-comment-loop [string]
+  (if (str/starts-with? string "[")
+    (loop [i 1 matching-bracket-count 1]
+      (if (zero? matching-bracket-count)
+        (subs string i)
+        (recur (inc i)
+               (if (= (nth string i) \[)
+                 (inc matching-bracket-count)
+                 (if (= (nth string i) \])
+                   (dec matching-bracket-count)
+                   matching-bracket-count)))))
+    string))
+
 (defn- optimize-ast [ast]
   (map #(update % :statements optimizer/optimize-sentence) ast))
 

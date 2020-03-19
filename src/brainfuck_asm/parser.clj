@@ -1,19 +1,6 @@
 (ns brainfuck-asm.parser
   (:require [clojure.string :as str]))
 
-(defn remove-initial-comment-loop [string]
-  (if (str/starts-with? string "[")
-    (loop [i 1 matching-bracket-count 1]
-      (if (zero? matching-bracket-count)
-        (subs string i)
-        (recur (inc i)
-               (if (= (nth string i) \[)
-                 (inc matching-bracket-count)
-                 (if (= (nth string i) \])
-                   (dec matching-bracket-count)
-                   matching-bracket-count)))))
-    string))
-
 (defn- balanced?
   "Returns whether brackets contained in expr are balanced"
   ([expr] (balanced? expr 0))
