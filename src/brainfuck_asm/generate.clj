@@ -1,4 +1,4 @@
-(ns brainfuck-asm.generator
+(ns brainfuck-asm.generate
   (:require [clojure.string :as str]))
 
 (defn- ^:const prepare-statements [statements]

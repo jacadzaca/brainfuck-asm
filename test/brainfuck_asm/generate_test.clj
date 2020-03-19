@@ -1,9 +1,9 @@
-(ns brainfuck-asm.generator-test
+(ns brainfuck-asm.generate-test
   (:require [clojure.test :refer [deftest is]]
             [clojure.string :as str]
-            [brainfuck-asm.generator :as generator]))
+            [brainfuck-asm.generate :as generate]))
 
-(let [generated-asm (generator/generate-assembly {})]
+(let [generated-asm (generate/generate-assembly {})]
   (deftest generates-bss-segement-test
     (is (re-find #"segment .bss\s*" generated-asm)))
 
@@ -25,7 +25,7 @@
 (defmacro test-statement-properly-translated
   [statement-name translation to-translate]
   `((deftest ~(symbol (str statement-name "-statement-properly-translated"))
-         (is (= ~translation (@#'generator/statement->asm  ~to-translate))))))
+         (is (= ~translation (@#'generate/statement->asm  ~to-translate))))))
 
 (test-statement-properly-translated inc         "inc byte [eax]"    {:type :inc})
 (test-statement-properly-translated dec         "dec byte [eax]"    {:type :dec})
@@ -46,4 +46,4 @@
       (test-statement-properly-translated loop-end loop-end-translation   {:type :loop-end :argument "loop1"}))
 
 (deftest statement->asm-throws-illegal-argument-when-cannot-translate-statement
-  (is (thrown-with-msg? IllegalArgumentException #":invalid is not a proper statement type" (@#'generator/statement->asm {:type :invalid}))))
+  (is (thrown-with-msg? IllegalArgumentException #":invalid is not a proper statement type" (@#'generate/statement->asm {:type :invalid}))))

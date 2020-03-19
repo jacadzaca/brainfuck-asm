@@ -1,4 +1,4 @@
-(ns brainfuck-asm.parser
+(ns brainfuck-asm.parse
   (:require [clojure.string :as str]))
 
 (defn ^:const balanced?

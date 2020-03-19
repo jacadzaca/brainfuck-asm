@@ -1,7 +1,7 @@
 (ns brainfuck-asm.core
-  (:require [brainfuck-asm.parser :as parser]
-            [brainfuck-asm.optimizer :as optimizer]
-            [brainfuck-asm.generator :as generator]
+  (:require [brainfuck-asm.parse :as parse]
+            [brainfuck-asm.optimize :as optimize]
+            [brainfuck-asm.generate :as generate]
             [clojure.java.io :as io]
             [clojure.string :as str])
   (:gen-class))
@@ -20,7 +20,7 @@
                                         matching-bracket-count)))))
 
 (defn- ^:const optimize-ast [ast]
-  (map #(update % :statements optimizer/optimize-sentence) ast))
+  (map #(update % :statements optimize/optimize-sentence) ast))
 
 (defn- ^:const remove-illegal-characters [input]
   (let [legal-characters #{\+ \- \< \> \. \, \[ \]}]
@@ -32,13 +32,13 @@
       (= input-file-name nil) (println "Please specify a brainfuck source file to compile")
       (.exists (io/file input-file-name))
         (let [brainfuck-code (slurp input-file-name)]
-        (if (parser/balanced? brainfuck-code) 
+        (if (parse/balanced? brainfuck-code) 
           (-> brainfuck-code
                       remove-illegal-characters 
                       remove-initial-comment-loop
-                      parser/generate-ast 
+                      parse/generate-ast 
                       optimize-ast 
-                      generator/generate-assembly 
+                      generate/generate-assembly 
                       println)
           (println "Your code's braces are unbalanced (missing [ or ]).")))
       :else (println (str "Cannot find: " input-file-name "\nExiting...")))))
