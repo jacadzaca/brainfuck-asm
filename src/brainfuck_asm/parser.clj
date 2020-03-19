@@ -59,7 +59,7 @@
                 characters
                 (inc loop-count))
      \]  (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
-                (first stack)
+                (peek stack)
                 (pop stack)
                 characters
                 loop-count)
