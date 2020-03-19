@@ -6,7 +6,7 @@
             [clojure.string :as str])
   (:gen-class))
 
-(defn- remove-initial-comment-loop 
+(defn- ^:const remove-initial-comment-loop 
   ([sequence] (case (first sequence)
                 \[ (remove-initial-comment-loop (drop 1 sequence) 1)
                 sequence))
@@ -19,10 +19,10 @@
                                         \] (dec matching-bracket-count)
                                         matching-bracket-count)))))
 
-(defn- optimize-ast [ast]
+(defn- ^:const optimize-ast [ast]
   (map #(update % :statements optimizer/optimize-sentence) ast))
 
-(defn ^:private ^:const remove-illegal-characters [input]
+(defn- ^:const remove-illegal-characters [input]
   (let [legal-characters #{\+ \- \< \> \. \, \[ \]}]
     (filter #(contains? legal-characters %) input)))
 

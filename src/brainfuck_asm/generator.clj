@@ -1,16 +1,16 @@
 (ns brainfuck-asm.generator
   (:require [clojure.string :as str]))
 
-(defn- prepare-statements [statements]
+(defn- ^:const prepare-statements [statements]
   (->> statements flatten (map #(str "    " %)) (str/join \newline)))
 
-(defn- generate-segment [name & statements]
+(defn- ^:const generate-segment [name & statements]
   (str "segment ." name \newline (prepare-statements statements) \newline))
 
-(defn- generate-label [name & statements]
+(defn- ^:const generate-label [name & statements]
   (str \newline name \: \newline (prepare-statements statements) \newline))
 
-(defn- generate-loop-condition [statement]
+(defn- ^:const generate-loop-condition [statement]
   ["cmp byte [eax], 0" (str "jne " (:argument statement)) "ret"])
 
 (def ^:private ^:const print-cell
@@ -23,7 +23,7 @@
 
 (def ^:private ^:const exit ["mov eax, 1" "xor ebx, ebx" "int 0x80"])
 
-(defn- statement->asm
+(defn- ^:const statement->asm
   "Translates an statement to assembly code"
   [statement]
   (case (:type statement)
@@ -43,7 +43,7 @@
     :load-array  "mov eax, array"
     (throw (IllegalArgumentException. (str (:type statement) " is not a proper statement type")))))
 
-(defn generate-assembly [ast]
+(defn ^:const generate-assembly [ast]
   (str
    (generate-segment "bss" "array: resb 30000")
    \newline
