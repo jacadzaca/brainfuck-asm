@@ -31,12 +31,14 @@
     (cond 
       (= input-file-name nil) (println "Please specify a brainfuck source file to compile")
       (.exists (io/file input-file-name))
-        (-> (first args) 
-            slurp
-            remove-initial-comment-loop
-            sanitize-input 
-            parser/generate-ast 
-            optimize-ast 
-            generator/generate-assembly 
-            println)
+        (let [brainfuck-code (slurp input-file-name)]
+        (if (parser/balanced? brainfuck-code) 
+          (-> brainfuck-code
+                      remove-initial-comment-loop
+                      sanitize-input 
+                      parser/generate-ast 
+                      optimize-ast 
+                      generator/generate-assembly 
+                      println)
+          (println "Your code's braces are unbalanced (missing [ or ]).")))
       :else (println (str "Cannot find: " input-file-name "\nExiting...")))))
