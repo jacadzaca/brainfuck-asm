@@ -25,7 +25,7 @@
 (defmacro test-statement-properly-translated
   [statement-name translation to-translate]
   `((deftest ~(symbol (str statement-name "-statement-properly-translated"))
-         (is (= ~translation (@#'generate/statement->asm  ~to-translate))))))
+      (is (= ~translation (@#'generate/statement->asm  ~to-translate))))))
 
 (test-statement-properly-translated inc         "inc byte [eax]"    {:type :inc})
 (test-statement-properly-translated dec         "dec byte [eax]"    {:type :dec})
@@ -42,8 +42,8 @@
 
 (let [call-exit-translation ["mov eax, 1" "xor ebx, ebx" "int 0x80"]
       loop-end-translation  ["cmp byte [eax], 0" "jne loop1" "ret"]]
-      (test-statement-properly-translated call-exit call-exit-translation {:type :call-exit})
-      (test-statement-properly-translated loop-end loop-end-translation   {:type :loop-end :argument "loop1"}))
+  (test-statement-properly-translated call-exit call-exit-translation {:type :call-exit})
+  (test-statement-properly-translated loop-end loop-end-translation   {:type :loop-end :argument "loop1"}))
 
 (deftest statement->asm-throws-illegal-argument-when-cannot-translate-statement
   (is (thrown-with-msg? IllegalArgumentException #":invalid is not a proper statement type" (@#'generate/statement->asm {:type :invalid}))))
