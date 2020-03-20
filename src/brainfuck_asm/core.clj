@@ -29,7 +29,7 @@
 (defn -main [& args]
   (let [input-file-name (first args)]
     (cond 
-      (= input-file-name nil) (println "Please specify a brainfuck source file to compile")
+      (nil? input-file-name) (println "Please specify a brainfuck source file to compile")
       (.exists (io/file input-file-name))
         (let [brainfuck-code (slurp input-file-name)]
         (if (parse/balanced? brainfuck-code) 
