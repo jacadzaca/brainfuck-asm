@@ -1,14 +1,20 @@
-(ns brainfuck-asm.parser-test
+(ns brainfuck-asm.parse-test
   (:require [clojure.test :refer [deftest is]]
-            [brainfuck-asm.parser :as parser]))
+            [brainfuck-asm.parse :as parse]))
 
 (deftest throws-assertion-error-when-bracket-is-not-closed-test
-  (is (thrown? AssertionError (parser/generate-ast "[+++][")))
-  (is (thrown? AssertionError (parser/generate-ast "[+++[")))
-  (is (thrown? AssertionError (parser/generate-ast "[][+++[]"))))
+  (is (thrown? AssertionError (parse/generate-ast "[+++][")))
+  (is (thrown? AssertionError (parse/generate-ast "[+++[")))
+  (is (thrown? AssertionError (parse/generate-ast "[][+++[]"))))
 
 (deftest throws-illegal-argument-exception-when-encounters-bad-symbol-test
-  (is (thrown? IllegalArgumentException (parser/generate-ast "asdf"))))
+  (is (thrown? IllegalArgumentException (parse/generate-ast "asdf"))))
+
+(deftest returns-true-if-brackets-balanced-test
+  (is (parse/balanced? "[[+[+]+]]+")))
+
+(deftest returns-false-if-brackets-unbalanced-test
+  (is (not (parse/balanced? "+[[[[+]]+++]"))))
 
 (def ^:private asts
   {"+-><.,"   (list {:type :entrypoint, :statements [{:type :load-array}
@@ -32,4 +38,4 @@
 
 (deftest generates-valid-ast
   (doseq [[code ast] asts]
-    (is (= ast (parser/generate-ast code)))))
+    (is (= ast (parse/generate-ast code)))))

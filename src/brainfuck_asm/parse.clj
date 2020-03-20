@@ -1,20 +1,6 @@
-(ns brainfuck-asm.parser
-  (:require [clojure.string :as str]))
+(ns brainfuck-asm.parse)
 
-(defn remove-initial-comment-loop [string]
-  (if (str/starts-with? string "[")
-    (loop [i 1 matching-bracket-count 1]
-      (if (zero? matching-bracket-count)
-        (subs string i)
-        (recur (inc i)
-               (if (= (nth string i) \[)
-                 (inc matching-bracket-count)
-                 (if (= (nth string i) \])
-                   (dec matching-bracket-count)
-                   matching-bracket-count)))))
-    string))
-
-(defn- balanced?
+(defn ^:const balanced?
   "Returns whether brackets contained in expr are balanced"
   ([expr] (balanced? expr 0))
   ([[x & xs] count]
@@ -24,19 +10,19 @@
          (= x \]) (recur xs (dec count))
          :else (recur xs count))))
 
-(defn create-statement
+(defn ^:const create-statement
   ([type]
    {:type type})
   ([type argument]
    {:type      type
     :argument argument}))
 
-(defn- craete-loop [name]
+(defn- ^:const craete-loop [name]
   {:name name
    :type :loop
    :statements []})
 
-(defn- brainfuck->ast-node [character]
+(defn- ^:const brainfuck->ast-node [character]
   (case character
     \+ (create-statement :inc)
     \- (create-statement :dec)
@@ -46,7 +32,7 @@
     \, (create-statement :call-read)
     (throw (IllegalArgumentException. (format "%s is not a valid brainfuck symbol" character)))))
 
-(defn generate-ast
+(defn ^:const generate-ast
   ([brainfuck-symbols]
    {:pre [(balanced? brainfuck-symbols)]}
    (generate-ast '() {:type :entrypoint :statements [{:type :load-array}]} '() brainfuck-symbols 0))
@@ -59,7 +45,7 @@
                 characters
                 (inc loop-count))
      \]  (recur (conj ast (update current-label :statements conj (create-statement :loop-end (:name current-label))))
-                (first stack)
+                (peek stack)
                 (pop stack)
                 characters
                 loop-count)
