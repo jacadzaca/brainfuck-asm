@@ -6,7 +6,8 @@
 A simple brainfuck to NASM assembly compiler, written in Clojure
 
 ##  Prerequisites
-Make sure you have NASM assembler installed
+[Make sure you have NASM assembler installed](https://www.nasm.us/)
+[Make sure you have lein installed]([https://leiningen.org/#install](https://leiningen.org/#install))
 
 ## Creating an executable
 ```bash
